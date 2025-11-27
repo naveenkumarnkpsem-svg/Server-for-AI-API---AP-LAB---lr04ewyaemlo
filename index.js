@@ -8,12 +8,12 @@ app.use(express.json());
 
 app.post("/api/gemini/prompt/send", async (req, res) => {
 
-  const p = req.body;
+  const {prompt} = req.body;
 
   const YOUR_API_KEY = process.env.YOUR_API_KEY
 
-  if (!p) {
-    return res.status(400).josn({
+  if (!prompt||typeof prompt !== "string") {
+    return res.status(400).json({
       "message": "Please send a valid prompt"
     })
   }
