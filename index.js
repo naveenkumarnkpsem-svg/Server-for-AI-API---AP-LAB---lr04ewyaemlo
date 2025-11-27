@@ -6,8 +6,53 @@ const port = 3000;
 dotenv.config()
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
+app.post("/api/gemini/prompt/send", async (req, res) => {
+
+  const p = req.body;
+
+  const YOUR_API_KEY = process.env.YOUR_API_KEY
+
+  if (!p) {
+    return res.status(400).josn({
+      "message": "Please send a valid prompt"
+    })
+  }
+
+  try {
+
+    const result = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${YOUR_API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          {
+            "contents": [{
+              "parts": [{ "text": "Write a story about a magic backpack." }]
+            }]
+          }
+
+        )
+
+      }
+    )
+
+    const data = await result.json()
+    return res.status(200).json(
+      {response:data}
+    )
+
+
+  }
+  catch (err) {
+    console.log(err)
+    return res.status(500).json({eror:err.message})
+  }
+
+
+
+
+
+
 });
 
 app.listen(port, () => {
