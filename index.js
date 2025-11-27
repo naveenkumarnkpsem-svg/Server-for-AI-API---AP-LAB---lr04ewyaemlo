@@ -10,7 +10,7 @@ app.post("/api/gemini/prompt/send", async (req, res) => {
 
   const {prompt} = req.body;
 
-  const YOUR_API_KEY = process.env.YOUR_API_KEY
+  const YOUR_API_KEY = process.env.API_KEY
 
   if (!prompt||typeof prompt !== "string") {
     return res.status(400).json({
